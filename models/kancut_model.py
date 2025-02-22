@@ -135,16 +135,20 @@ class KANCUTModel(BaseModel):
 
     def forward(self):
         """Run forward pass; called by both functions <optimize_parameters> and <test>."""
-        self.real = torch.cat((self.real_A, self.real_B), dim=0) if self.opt.nce_idt and self.opt.isTrain else self.real_A
+        #self.real = torch.cat((self.real_A, self.real_B), dim=0) if self.opt.nce_idt and self.opt.isTrain else self.real_A
         if self.opt.flip_equivariance:
             self.flipped_for_equivariance = self.opt.isTrain and (np.random.random() < 0.5)
             if self.flipped_for_equivariance:
-                self.real = torch.flip(self.real, [3])
+                self.real_A = torch.flip(self.real_A, [3])
+                self.real_B = torch.flip(self.real_B, [3])
+                #self.real = torch.flip(self.real, [3])
 
-        self.fake = self.netG(self.real)
-        self.fake_B = self.fake[:self.real_A.size(0)]
+        #self.fake = self.netG(self.real)
+        #self.fake_B = self.fake[:self.real_A.size(0)]
+        self.fake_B = self.netG(self.real_A)
         if self.opt.nce_idt:
-            self.idt_B = self.fake[self.real_A.size(0):]
+            self.idt_B = self.netG(self.real_B)
+            #self.idt_B = self.fake[self.real_A.size(0):]
 
     def compute_D_loss(self):
         """Calculate GAN loss for the discriminator"""
