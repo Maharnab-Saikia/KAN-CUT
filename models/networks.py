@@ -697,7 +697,6 @@ class ResnetGenerator(nn.Module):
         self.model = nn.Sequential(*model)
 
     def forward(self, input, layers=[], encode_only=False):
-        input = input.unsqueeze(1)
         if -1 in layers:
             layers.append(len(self.model))
         if len(layers) > 0:
@@ -719,7 +718,7 @@ class ResnetGenerator(nn.Module):
             return feat, feats  # return both output and intermediate features
         else:
             """Standard forward"""
-            fake = self.model(input).squeeze(1)
+            fake = self.model(input)
             return fake
 
 
@@ -949,7 +948,7 @@ class NLayerDiscriminator(nn.Module):
 
     def forward(self, input):
         """Standard forward."""
-        return self.model(input.unsqueeze(1))
+        return self.model(input)
 
 
 class PixelDiscriminator(nn.Module):
