@@ -57,6 +57,7 @@ if __name__ == '__main__':
                 losses = model.get_current_losses()
                 
                 for k, v in losses.items():
+                    print(losses)
                     if k != 'NCE_List':
                         if k == 'G_GAN':
                             epoch_g_loss += v * opt.batch_size / dataset_size
