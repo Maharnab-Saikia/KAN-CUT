@@ -64,11 +64,6 @@ if __name__ == '__main__':
                             epoch_d_loss += v * opt.batch_size / dataset_size
                         if k == 'NCE':
                             epoch_nce_loss += v * opt.batch_size / dataset_size
-                
-                
-                visualizer.print_current_losses(epoch, epoch_iter, losses, optimize_time, t_data)
-                if opt.display_id is None or opt.display_id > 0:
-                    visualizer.plot_current_losses(epoch, float(epoch_iter) / dataset_size, losses)
 
             iter_data_time = time.time()
 
