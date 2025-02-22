@@ -433,9 +433,10 @@ class PatchSampleF(nn.Module):
                 if patch_ids is not None:
                     patch_id = patch_ids[feat_id]
                 else:
+                    patch_id = torch.randperm(feat_reshape.shape[1], device=feats[0].device)
                     patch_id = np.random.permutation(feat_reshape.shape[1])
                     patch_id = patch_id[:int(min(num_patches, patch_id.shape[0]))]
-                patch_id = torch.tensor(patch_id, dtype=torch.long, device=self.device)
+                #patch_id = torch.tensor(patch_id, dtype=torch.long, device=self.device)
                 x_sample = feat_reshape[:, patch_id, :].flatten(0, 1)
             else:
                 x_sample = feat_reshape
@@ -697,6 +698,7 @@ class ResnetGenerator(nn.Module):
         self.model = nn.Sequential(*model)
 
     def forward(self, input, layers=[], encode_only=False):
+        input = input.unsqueeze(1)
         if -1 in layers:
             layers.append(len(self.model))
         if len(layers) > 0:
@@ -718,7 +720,7 @@ class ResnetGenerator(nn.Module):
             return feat, feats  # return both output and intermediate features
         else:
             """Standard forward"""
-            fake = self.model(input)
+            fake = self.model(input).squeeze(1)
             return fake
 
 
@@ -948,7 +950,7 @@ class NLayerDiscriminator(nn.Module):
 
     def forward(self, input):
         """Standard forward."""
-        return self.model(input)
+        return self.model(input.unsqueeze(1))
 
 
 class PixelDiscriminator(nn.Module):
