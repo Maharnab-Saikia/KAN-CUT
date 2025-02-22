@@ -628,9 +628,7 @@ class LayerNorm(nn.Module):
 
 class ResnetGenerator(nn.Module):
     
-    
     #We adapt Torch code and idea from Justin Johnson's neural style transfer project(https://github.com/jcjohnson/fast-neural-style)
-
 
     def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, n_blocks=6, padding_type='reflect', no_antialias=False, no_antialias_up=False, opt=None):
         """Construct a Resnet-based generator
@@ -699,6 +697,7 @@ class ResnetGenerator(nn.Module):
         self.model = nn.Sequential(*model)
 
     def forward(self, input, layers=[], encode_only=False):
+        input = input.unsqueeze(1)
         if -1 in layers:
             layers.append(len(self.model))
         if len(layers) > 0:
@@ -720,7 +719,7 @@ class ResnetGenerator(nn.Module):
             return feat, feats  # return both output and intermediate features
         else:
             """Standard forward"""
-            fake = self.model(input)
+            fake = self.model(input).squeeze(1)
             return fake
 
 
