@@ -434,7 +434,7 @@ class PatchSampleF(nn.Module):
                     patch_id = patch_ids[feat_id]
                 else:
                     patch_id = torch.randperm(feat_reshape.shape[1], device=feats[0].device)
-                    patch_id = np.random.permutation(feat_reshape.shape[1])
+                    #patch_id = np.random.permutation(feat_reshape.shape[1])
                     patch_id = patch_id[:int(min(num_patches, patch_id.shape[0]))]
                 #patch_id = torch.tensor(patch_id, dtype=torch.long, device=self.device)
                 x_sample = feat_reshape[:, patch_id, :].flatten(0, 1)
