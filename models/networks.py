@@ -631,7 +631,7 @@ class ResnetGenerator(nn.Module):
     
     #We adapt Torch code and idea from Justin Johnson's neural style transfer project(https://github.com/jcjohnson/fast-neural-style)
 
-    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, n_blocks=6, padding_type='reflect', no_antialias=False, no_antialias_up=False, opt=None):
+    def __init__(self, input_nc, output_nc, ngf=64, norm_layer=nn.BatchNorm2d, use_dropout=False, n_blocks=6, padding_type='replicate', no_antialias=False, no_antialias_up=False, opt=None):
         """Construct a Resnet-based generator
 
         Parameters:
@@ -651,7 +651,7 @@ class ResnetGenerator(nn.Module):
         else:
             use_bias = norm_layer == nn.InstanceNorm2d
 
-        model = [nn.ReflectionPad2d(3),
+        model = [nn.ReplicationPad2d(3),    #nn.ReflectionPad2d(3),
                  nn.Conv2d(input_nc, ngf, kernel_size=7, padding=0, bias=use_bias),
                  norm_layer(ngf),
                  nn.ReLU(True)]
@@ -691,7 +691,7 @@ class ResnetGenerator(nn.Module):
                                     bias=use_bias),
                           norm_layer(int(ngf * mult / 2)),
                           nn.ReLU(True)]
-        model += [nn.ReflectionPad2d(3)]
+        model += [nn.ReplicationPad2d(3)]    #nn.ReflectionPad2d(3)
         model += [nn.Conv2d(ngf, output_nc, kernel_size=7, padding=0)]
         # model += [nn.Tanh()]
 
